@@ -4,6 +4,7 @@ import 'package:dio/dio.dart';
 import 'package:kmshoppy/provider/slider_provider.dart';
 import 'package:provider/provider.dart';
 
+import '../models/detils_model.dart';
 import '../provider/feturedItem_provider.dart';
 import '../resources/urls.dart';
 
@@ -89,15 +90,62 @@ class DioHelper {
   //     showMessage(response.data['message'], Colors.redAccent, context);
   //   }
   // }
-
+   Future<List<VariantModel>> getData() async {
+    try {
+      Response response = await dio.get(productDetails);
+      print("response=$response");
+      Map<String, dynamic> result = json.decode(response.data);
+      print("result=$result");
+      if (result['Message'] == "Product Details  ") {
+        List collection = result['Data']['ProdDetails']['ProdImages'];
+        print("list=$collection");
+        return [];
+        return collection.map((s) => VariantModel.fromJson(s)).toList();
+      } else {
+        throw Exception("Internal Server Error");
+      }
+    } on DioError catch (e) {
+      throw Exception(e.response);
+    }
+  }
   Future getFeaturedItems(context, int categoryId) async {
     //final userState = Provider.of<UserProvider>(context, listen: false);
     // final state = Provider.of<BranchProvider>(context, listen: false);
     final state = Provider.of<ItemProvider>(context, listen: false);
-    final response = await dio.get(getHomeProducts);
+    final response = await dio.get(productDetails);
     state.addFrequentItems(jsonEncode(response.data));
   }
+  Future getSample(context,urlKey) async {
+    //final userState = Provider.of<UserProvider>(context, listen: false);
+    // final state = Provider.of<BranchProvider>(context, listen: false);
+    final state = Provider.of<ItemProvider>(context, listen: false);
+    final response = await dio.get("${baseUrl}ProductDetails?urlKey=$urlKey&custId=''&guestId=4653631114&pincode='kmshoppy'&vendorUrlKey='kmshoppy'");
+    state.addVariants(jsonEncode(response.data));
 
+    // final parsedJson = json.decode(response.data);
+    // print("privilege=$privilege");
+    // final privilege = parsedJson['Data']['ProdDetails']['variationJson'];
+    // print("privilege=$privilege");
+  }
+  Future getProductDetails(
+      context,urlKey
+      ) async {
+    print('state1');
+    final state = Provider.of<ItemProvider>(context, listen: false);
+    // progressDialogue(context);
+    final response = await dio.get("${baseUrl}ProductDetails?urlKey=$urlKey&custId=''&guestId=4653631114&pincode='kmshoppy'&vendorUrlKey='kmshoppy'");
+    print('state2');
+     print('dtails; $response');
+    if (response.data['Message'] == "Product Details  ") {
+      print("true");
+      state.addDetails(jsonEncode(response.data));
+      // state.setBranch(context);
+      // print(
+      //     'state.selectedBranchId ${state.selectedBranchId} ${state.branchesList.length}');
+    } else {
+      //showMessage(response.data['message'], Colors.redAccent, context);
+    }
+  }
   Future getSliders(
     context,
   ) async {
@@ -118,27 +166,6 @@ class DioHelper {
     }
   }
 
-  // Future getCategoryItems(context, int categoryId) async {
-  //   final userState = Provider.of<UserProvider>(context, listen: false);
-  //   // final state = Provider.of<BranchProvider>(context, listen: false);
-  //   final state = Provider.of<ItemProvider>(context, listen: false);
-  //   final response = await dio.get(itemsByCategory, queryParameters: {
-  //     "category_id": categoryId,
-  //     "branch_id": 1,
-  //   });
-  //   //print("response=${jsonEncode(response.data)}");
-  //   state.addItems(jsonEncode(response.data));
-  // }
 
-  // Future getSubCategoryItems(context, int subCateId) async {
-  //   final userState = Provider.of<UserProvider>(context, listen: false);
-  //   // final state = Provider.of<BranchProvider>(context, listen: false);
-  //   final state = Provider.of<ItemProvider>(context, listen: false);
-  //   final response = await dio.get(itemsListUrl, queryParameters: {
-  //     "sub_category_id": subCateId,
-  //     "branch_id": 1,
-  //     // "token": userState.userModel.token
-  //   });
-  //   state.addItems(jsonEncode(response.data));
-  // }
+
 }

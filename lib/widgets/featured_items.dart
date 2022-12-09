@@ -4,7 +4,9 @@ import 'package:provider/provider.dart';
 
 import '../models/feturedItem_model.dart';
 import '../provider/feturedItem_provider.dart';
+import '../resources/app_utils.dart';
 import '../resources/colors.dart';
+import '../screens/details_screen.dart';
 import 'featuredItem_widget.dart';
 class FeaturedItems extends StatefulWidget {
   const FeaturedItems({
@@ -86,8 +88,8 @@ class _FeaturedItemsState extends State<FeaturedItems> {
                 itemBuilder: (ctx, index) {
                   return InkWell(
                     onTap: () {
-                      // navigateToPage(context,
-                      //     ProductDetails(model: randomList[index]));
+                      navigateToPage(context,
+                          ProductDetails(model: randomList[index],));
                     },
                     child: FrequentItemBlock(
                       data: randomList[index],
