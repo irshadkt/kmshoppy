@@ -33,8 +33,8 @@ class DetailModel {
     this.shortDescription,
     this.prWeight,
     this.additionalImages,
-    //this.variants,
-    //this.variantList
+    this.variants,
+    this.variantList
   });
   DetailModel.fromJson(dynamic json) {
     itemName = json['prName'];
@@ -47,7 +47,27 @@ class DetailModel {
     shortDescription = json['shortDescription'];
     prWeight = json['prWeight'];
     additionalImages = [];
-    //variantList= json['variationJson'];
+    variants=json['variationJson'];
+    //var a=json['variationJson'];
+    //var ab = json.decode(a).cast<String>().toList();
+    //var b=json.decode(a);
+    //variantList=ab;
+   // variants=json['stockAvailability'];
+    //variantList= lists[0]['AttrValues'];
+    if (variants != null) {
+      var lists = jsonDecode(json['variationJson']);
+      if(lists != null){
+        variantList = [];
+        lists[0]['AttrValues'].forEach((v) {
+          variantList?.add(VariantModel.fromJson(v));
+        });
+      }else{
+        variantList=[];
+      }
+    }else{
+      variantList=[];
+    }
+    //variantList=[];
   }
   String? itemName;
   String? image;
@@ -59,20 +79,33 @@ class DetailModel {
   String? shortDescription;
   String? prWeight;
   List<String>? additionalImages;
+  String? variants;
   //VariantModel? variants;
- //List<VariantModel>? variantList;
+ List<VariantModel>? variantList;
   //List ? variantList;
 }
-VariantModel variantModelFromJson(String str) =>
-    VariantModel.fromJson(json.decode(str));
+// VariantModel variantModelFromJson(String str) =>
+//     VariantModel.fromJson(json.decode(str));
 class VariantModel {
   VariantModel({
     this.itemName,
+    this.urlKey,
+    this.unitPrice,
+    this.specialPrice,
+    this.itemID
   });
   VariantModel.fromJson(Map<String, dynamic> json) {
-    itemName = json['imageUrl'];
+    itemName = json['prName'];
+    urlKey = json['prName'];
+    unitPrice = double.parse(json['prPrice']);
+    specialPrice = double.parse(json['prSpecialPrice']);
+    itemID = json['productId'];
   }
   String? itemName;
+  String? itemID;
+  double? specialPrice;
+  double? unitPrice;
+  String? urlKey;
 }
 //variants=json['variationJson']['AttrValues'];
 // variants=json['variationJson'];

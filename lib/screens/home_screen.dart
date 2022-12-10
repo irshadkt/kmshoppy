@@ -44,13 +44,9 @@ class _HomepageState extends State<Homepage> {
     if (mounted) {
       setState(() => isLoading = true);
     }
+    await DioHelper().getFeaturedItems(context, 5);
     await DioHelper().getSliders(context);
     //await DioHelper().getCategories(context, 1);
-    await DioHelper().getFeaturedItems(context, 5);
-
-    // if (isLogged) {
-    //   await DioHelper().getAddress(context);
-    // }
     // await Provider.of<CartProvider>(context, listen: false).getCart(context);
     if (mounted) {
       setState(() => isLoading = false);
@@ -85,7 +81,7 @@ class _HomepageState extends State<Homepage> {
                     children: [
                       Container(
                         width: MediaQuery.of(context).size.width,
-                        decoration: BoxDecoration(
+                        decoration:const BoxDecoration(
                           color: Colors.indigo,
                           // border: Border(
                           //     bottom: BorderSide(color: primaryYellow))
@@ -146,10 +142,10 @@ class _HomepageState extends State<Homepage> {
                                     color: Colors.white,
                                     border: Border.all(
                                         color:
-                                            Color.fromRGBO(211, 211, 207, 1)),
+                                            const Color.fromRGBO(211, 211, 207, 1)),
                                     borderRadius: BorderRadius.circular(12)),
                                 height: 50,
-                                margin: EdgeInsets.symmetric(vertical: 0),
+                                margin:const EdgeInsets.symmetric(vertical: 0),
                                 child: Row(
                                   mainAxisAlignment:
                                       MainAxisAlignment.start,
@@ -201,7 +197,7 @@ class _HomepageState extends State<Homepage> {
                       const HomeFooter(),
                       // ShopByCategory(),
                       const SizedBox(
-                        height: 100,
+                        height: 0,
                       )
                     ],
                   ),
@@ -209,34 +205,8 @@ class _HomepageState extends State<Homepage> {
         ),
       ),
       bottomNavigationBar: const BottomBarListWidget(),
-      // floatingActionButtonLocation:
-      //     FloatingActionButtonLocation.miniCenterFloat,
-      // floatingActionButton: CustomFloatButton(),
     );
   }
-
-  // String buildAddress(AddressData data) {
-  //   String address = "";
-  //   address += (data.name != null && data.name != "" ? "${data.name}" : "") +
-  //       (data.address != null && data.address != ""
-  //           ? ", ${data.address}"
-  //           : "") +
-  //       (data.buildingName != null && data.buildingName != ""
-  //           ? ", ${data.buildingName}"
-  //           : "") +
-  //       (data.landmark != null && data.landmark != ""
-  //           ? ", ${data.landmark}"
-  //           : "") +
-  //       (data.district != null && data.district != ""
-  //           ? ", ${data.district}"
-  //           : "") +
-  //       (data.pinCode != null && data.pinCode != ""
-  //           ? "\n${data.pinCode}"
-  //           : "") +
-  //       (data.mobile1 != null && data.mobile1 != "" ? "\n${data.mobile1}" : "");
-  //   return address;
-  // }
-
   @override
   void dispose() {
     // TODO: implement dispose

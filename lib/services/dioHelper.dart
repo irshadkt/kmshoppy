@@ -112,7 +112,7 @@ class DioHelper {
     //final userState = Provider.of<UserProvider>(context, listen: false);
     // final state = Provider.of<BranchProvider>(context, listen: false);
     final state = Provider.of<ItemProvider>(context, listen: false);
-    final response = await dio.get(productDetails);
+    final response = await dio.get(getHomeProducts);
     state.addFrequentItems(jsonEncode(response.data));
   }
   Future getSample(context,urlKey) async {
@@ -133,9 +133,11 @@ class DioHelper {
     print('state1');
     final state = Provider.of<ItemProvider>(context, listen: false);
     // progressDialogue(context);
+    //final response = await dio.get(productDetails);
     final response = await dio.get("${baseUrl}ProductDetails?urlKey=$urlKey&custId=''&guestId=4653631114&pincode='kmshoppy'&vendorUrlKey='kmshoppy'");
+    //print("urlkey=$urlKey");
     print('state2');
-     print('dtails; $response');
+    // print('dtails; $response');
     if (response.data['Message'] == "Product Details  ") {
       print("true");
       state.addDetails(jsonEncode(response.data));

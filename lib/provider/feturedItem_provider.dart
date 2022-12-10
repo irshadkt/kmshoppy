@@ -28,27 +28,29 @@ class ItemProvider with ChangeNotifier{
     final decode = jsonDecode(response);
     //print("decode=$decode");
     final privilege = decode['Data']['ProdDetails'];
-   // print("privilege========================================$privilege");
-    final variant = decode['Data']['ProdDetails']['variationJson'];
+    //print("privilege========================================$privilege");
+    final variant = jsonEncode(decode['Data']['ProdDetails']['variationJson']);
     final parsedJson = json.decode(variant);
-    final value = parsedJson['Attrname'];
-    print("value=$value");
+    //final parsedJson = variant;
+    //final value = parsedJson['Attrname'];
+    print("value=$variant");
+    print("value=$parsedJson");
    //   final parsedJson = jsonDecode(decode['Data']['ProdDetails']['ProductCategories']);
    //  print("parsedJson=$parsedJson");
     //final privilege = parsedJson['Data']['ProdDetails']['variationJson'];
     //print("privilege=$privilege");
-    // if (decode != null) {
-    //   var branches = [];
-    //   branches = decode['Data']['ProdDetails'].map((items) {
-    //     return VariantModel.fromJson(items);
-    //   }).toList();
-    //   variantList = List<VariantModel>.from(branches);
-    //   print("VariantModel=$VariantModel");
-    //   notifyListeners();
-    // }
-    // print('frequentItemList=$frequentItemList');
-    print('frequentItemList.length${frequentItemList.length}');
-  }
+  //   if (decode != null) {
+  //     // var branches = [];
+  //     // branches = decode['Data']['ProdDetails'].map((items) {
+  //     //   return VariantModel.fromJson(items);
+  //     // }).toList();
+  //      variantList = List<VariantModel>.from(variant);
+  //   //   print("VariantModel=$VariantModel");
+  //   //   notifyListeners();
+  //   // }
+  //   // print('frequentItemList=$frequentItemList');
+  //   print('frequentItemList.length${frequentItemList.length}');
+   }
   void addFrequentItems(String response) {
     final decode = jsonDecode(response);
     if (decode != null) {

@@ -20,11 +20,11 @@ class HomeFooter extends StatelessWidget {
             //     Color.fromRGBO(211, 211, 207, 1)),
             borderRadius: BorderRadius.circular(12)),
         //height: 50,
-        margin:const EdgeInsets.symmetric(vertical: 10),
+        margin:const EdgeInsets.symmetric(vertical: 8),
         child: Row(
           children: [
             SizedBox(
-              width: MediaQuery.of(context).size.width/1.8,
+              width: MediaQuery.of(context).size.width/2,
               child: Column(
                 children: [
                   iconWithText("Get things delivered to your doorstep", Icons.delivery_dining),
@@ -58,7 +58,7 @@ class HomeFooter extends StatelessWidget {
                   title: Text(
                     text,
                     style: GoogleFonts.nunitoSans(
-                        color: Colors.indigo,fontSize: 16,fontWeight: FontWeight.w800),
+                        color: Colors.indigo,fontSize: 14,fontWeight: FontWeight.w800),
                   ),
                 ),
 

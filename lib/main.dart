@@ -1,10 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:kmshoppy/db/db_model.dart';
 import 'package:kmshoppy/provider/feturedItem_provider.dart';
 import 'package:kmshoppy/provider/slider_provider.dart';
 import 'package:kmshoppy/screens/home_screen.dart';
 import 'package:provider/provider.dart';
 
+import 'package:hive_flutter/hive_flutter.dart';
 void main() {
+  Hive.initFlutter();
+  if(!Hive.isAdapterRegistered(DbCartModelAdapter().typeId)){ 
+    Hive.registerAdapter(DbCartModelAdapter());
+  }
   runApp(const MyApp());
 }
 

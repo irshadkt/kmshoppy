@@ -1,10 +1,7 @@
-import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:kmshoppy/provider/feturedItem_provider.dart';
 import 'package:provider/provider.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-
 import '../models/feturedItem_model.dart';
 import '../resources/app_utils.dart';
 import '../resources/colors.dart';
@@ -37,8 +34,6 @@ class _ProductDetailsState extends State<ProductDetails> {
       });
     }
     await DioHelper().getProductDetails(context, widget.model.urlKey);
-    await DioHelper().getSample( context,widget.model.urlKey);
-
     if (mounted) {
       setState(() {
         isLoading = false;
@@ -56,9 +51,6 @@ class _ProductDetailsState extends State<ProductDetails> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      floatingActionButton: FloatingActionButton(onPressed: () async {
-         DioHelper().getData();
-      }),
       backgroundColor: Colors.white,
       body: SafeArea(
         child: isLoading
@@ -67,7 +59,8 @@ class _ProductDetailsState extends State<ProductDetails> {
               )
             : SingleChildScrollView(
                 child: Consumer<ItemProvider>(builder: (context, model, _) {
-                  //print("name=${model.productDetail.itemName}");
+                  // print("name=${model.productDetail.variants}");
+                  // print("length=${model.productDetail.variantList?.length ?? 0}");
                   return Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -88,80 +81,51 @@ class _ProductDetailsState extends State<ProductDetails> {
                               color: Colors.black,
                               size: 25,
                             ),
-                            const SizedBox(width: 20,),
+                            const SizedBox(
+                              width: 20,
+                            ),
                             const Icon(
                               Icons.shopping_cart_outlined,
                               color: Colors.black,
                             )
-                            // if (isLogged)
-                            //   IconButton(
-                            //     icon: Image.asset(
-                            //         !isFavourite ? favUnchecked : favChecked),
-                            //     onPressed: () async {
-                            //       final state = Provider.of<UserProvider>(context,
-                            //           listen: false);
-                            //       progressDialogue(context);
-                            //       !isFavourite
-                            //           ? await DioHelper().addFavorite(
-                            //           context, widget.model.barcode)
-                            //           : await DioHelper().deleteFavorite(
-                            //           context, widget.model.barcode);
-                            //       await DioHelper().getFavoriteList(context);
-                            //       setState(() {
-                            //         isFavourite = state.myFavourites.any(
-                            //                 (element) =>
-                            //             element.itemID ==
-                            //                 widget.model.itemID);
-                            //         // isFavourite = !isFavourite;
-                            //       });
-                            //       Navigator.pop(context);
-                            //     },
-                            //   ),
                           ],
                         ),
                       ),
                       Stack(
                         children: [
                           Container(
-                            padding: const EdgeInsets.all(10.0),
+                              padding: const EdgeInsets.all(10.0),
                               margin: const EdgeInsets.all(20.0),
-                             // width: MediaQuery.of(context).size.height/3,
+                              // width: MediaQuery.of(context).size.height/3,
                               //height: MediaQuery.of(context).size.height/3,
-                               //height: 250,
+                              //height: 250,
                               child: Center(
-                                child: buildNetworkImage(context,
-                                    model.productDetail.image,
+                                child: buildNetworkImage(
+                                    context, model.productDetail.image,
                                     boxFit: BoxFit.cover),
                               )
                               // child: Image.network(widget.model.image!,fit: BoxFit.cover,),
                               ),
-                           Positioned(
-                             top: 15,right: 15,
-                             child: Icon(
+                          Positioned(
+                            top: 15,
+                            right: 15,
+                            child: Icon(
                               Icons.favorite_outline_sharp,
                               color: Colors.red[200],
                               size: 25,
+                            ),
                           ),
-                           ),
-                          Positioned(
-                            bottom: 15,right: 15,
+                          const Positioned(
+                            bottom: 15,
+                            right: 15,
                             child: Icon(
                               Icons.zoom_out_map,
                               color: greyColor,
                               size: 25,
                             ),
                           ),
-                          // if (getDiscount(
-                          //     widget.model.salesPrice!, widget.model.mrp!) !=
-                          //     0)
-
                         ],
                       ),
-                      // Center(
-                      //   child: buildIndicator(
-                      //       activeIndex, widget.model.additionalImages!,
-                      //       dotHeight: 4, dotWidth: 15),
-                      // ),
                       Padding(
                         padding: const EdgeInsets.all(10.0),
                         child: Text(
@@ -171,7 +135,8 @@ class _ProductDetailsState extends State<ProductDetails> {
                         ),
                       ),
                       Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 10.0,vertical: 0),
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 10.0, vertical: 0),
                         child: Text(
                           '1 Pack',
                           style: GoogleFonts.nunitoSans(
@@ -194,7 +159,7 @@ class _ProductDetailsState extends State<ProductDetails> {
                                     style: GoogleFonts.nunitoSans(
                                         fontWeight: FontWeight.w800,
                                         fontSize: 19)),
-                                SizedBox(
+                                const SizedBox(
                                   width: 10,
                                 ),
                               ],
@@ -391,188 +356,374 @@ class _ProductDetailsState extends State<ProductDetails> {
                           ],
                         ),
                       ),
-
-                      Padding(
-                        padding: const EdgeInsets.all(10.0),
-                        child: Container(
-                          //height: 200,
-                          padding: const EdgeInsets.symmetric(horizontal: 10,vertical: 10),
-                          decoration: BoxDecoration(
-                              color: Colors.grey[50],
-                              // border: Border.all(
-                              //     color:
-                              //     Color.fromRGBO(211, 211, 207, 1)),
-                              borderRadius: BorderRadius.circular(12)),
-                          //height: 50,
-                          //margin: const EdgeInsets.symmetric(vertical: 0),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Padding(
-                                padding: const EdgeInsets.symmetric(vertical: 5.0),
-                                child: Text(
-                                  'Please select a variant',
-                                  style: GoogleFonts.nunitoSans(
-                                      fontWeight: FontWeight.w800,
-                                      fontSize: 15,
-                                      color: Colors.black),
-                                ),
-                              ),
-                              Consumer<ItemProvider>(builder: (context, model, _) {
-                              // print("varients= ${model.productDetail.variantList?.length}");
-                                return ListView.builder(
-                                    scrollDirection: Axis.vertical,
-                                    shrinkWrap: true,
-                                    physics:const NeverScrollableScrollPhysics(),
-                                    itemCount: 2,
-                                    itemBuilder: (ctx, index) {
-                                      return InkWell(
-                                        onTap: () {
-                                          // navigateToPage(context,
-                                          //     ProductDetails(model: randomList[index],));
-                                        },
-                                        child:Container(
-                                          decoration: BoxDecoration(
-                                              color: Colors.white,
-                                              border: Border.all(
-                                                  width: 2, color: Colors.indigo),
-                                              borderRadius: BorderRadius.circular(5)),
-                                          margin:const EdgeInsets.symmetric(vertical: 5) ,
-                                          padding:const EdgeInsets.symmetric(vertical: 10) ,
+                      model.productDetail.variantList!.isEmpty
+                          ? Container(
+                              decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  // border: Border.all(
+                                  //     width: 2,
+                                  //     color: Colors.indigo),
+                                  borderRadius: BorderRadius.circular(5)),
+                              margin: const EdgeInsets.symmetric(vertical: 5),
+                              padding: const EdgeInsets.symmetric(vertical: 10),
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  SizedBox(
+                                    width:
+                                        MediaQuery.of(context).size.width / 1.7,
+                                    child: Column(
+                                      children: [
+                                        Padding(
+                                          padding: const EdgeInsets.symmetric(
+                                              horizontal: 10.0),
                                           child: Row(
-                                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                             children: [
-                                              SizedBox(
-                                                width: MediaQuery.of(context).size.width / 1.7,
-                                                child: Column(
-                                                  children: [
-                                                    Text(
-                                                      //model.productDetail.variants?.first.itemName ?? "error",
-                                                       model.productDetail.itemName ?? "",
-                                                      style: GoogleFonts.nunitoSans(
-                                                          fontWeight: FontWeight.w800,
-                                                          fontSize: 15),
-                                                    ),
-                                                    const SizedBox(height: 10,),
-                                                    Padding(
-                                                      padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                                                      child: Row(
-                                                        children: [
-                                                          Text(
-                                                              rupeeSymbol +
-                                                                  model.productDetail
-                                                                      .unitPrice!
-                                                                      .toStringAsFixed(2),
-                                                              style:
-                                                              GoogleFonts.nunitoSans(
-                                                                  fontWeight:
-                                                                  FontWeight.w700,
-                                                                  fontSize: 14)),
-                                                          SizedBox(
-                                                            width: 5,
-                                                          ),
-                                                          Text(
-                                                              rupeeSymbol +
-                                                                  // (model.productDetail.specialPrice!+5)
-                                                                  model.productDetail
-                                                                      .unitPrice!
-                                                                      .toStringAsFixed(2),
-                                                              style: GoogleFonts.nunitoSans(
-                                                                  fontWeight:
-                                                                  FontWeight.w500,
-                                                                  fontSize: 13,
-                                                                  color: greyColor,
-                                                                  decoration:
-                                                                  TextDecoration
-                                                                      .lineThrough)),
-                                                          Container(
-                                                            margin:const EdgeInsets.symmetric(
-                                                                horizontal: 5),
-                                                            padding: EdgeInsets.all(5),
-                                                            decoration: BoxDecoration(
-                                                                color: Colors.indigo,
-                                                                borderRadius:
-                                                                BorderRadius.circular(
-                                                                    5.0)),
-                                                            //height: 65,
-                                                            //width: 65,
-                                                            child: Center(
-                                                              child: Text(
-                                                                '4 % OFF',
-                                                                //'${getDiscount(widget.model.salesPrice!, widget.model.mrp!)}% OFF',
-                                                                textAlign:
-                                                                TextAlign.center,
-                                                                style: GoogleFonts
-                                                                    .nunitoSans(
-                                                                    color:
-                                                                    Colors.white,
-                                                                    fontWeight:
-                                                                    FontWeight
-                                                                        .w700,
-                                                                    fontSize: 11),
-                                                              ),
-                                                            ),
-                                                          ),
-                                                        ],
-                                                      ),
-                                                    ),
-                                                  ],
+                                              Text(
+                                                  rupeeSymbol +
+                                                      model.productDetail
+                                                          .unitPrice!
+                                                          .toStringAsFixed(2),
+                                                  style: GoogleFonts.nunitoSans(
+                                                      fontWeight:
+                                                          FontWeight.w700,
+                                                      fontSize: 14)),
+                                              const SizedBox(
+                                                width: 5,
+                                              ),
+                                              Text(
+                                                  rupeeSymbol +
+                                                      // (model.productDetail.specialPrice!+5)
+                                                      model.productDetail
+                                                          .unitPrice!
+                                                          .toStringAsFixed(2),
+                                                  style: GoogleFonts.nunitoSans(
+                                                      fontWeight:
+                                                          FontWeight.w500,
+                                                      fontSize: 13,
+                                                      color: greyColor,
+                                                      decoration: TextDecoration
+                                                          .lineThrough)),
+                                              Container(
+                                                margin:
+                                                    const EdgeInsets.symmetric(
+                                                        horizontal: 5),
+                                                padding:
+                                                    const EdgeInsets.all(5),
+                                                decoration: BoxDecoration(
+                                                    color: Colors.indigo,
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            5.0)),
+                                                //height: 65,
+                                                //width: 65,
+                                                child: Center(
+                                                  child: Text(
+                                                    '4 % OFF',
+                                                    //'${getDiscount(widget.model.salesPrice!, widget.model.mrp!)}% OFF',
+                                                    textAlign: TextAlign.center,
+                                                    style:
+                                                        GoogleFonts.nunitoSans(
+                                                            color: Colors.white,
+                                                            fontWeight:
+                                                                FontWeight.w700,
+                                                            fontSize: 11),
+                                                  ),
                                                 ),
                                               ),
-                                              InkWell(
-                                                  onTap: () async {
-                                                    // dbHelper.insert(CartModel(
-                                                    //   itemID: widget.model.itemID!,
-                                                    //   itemName: widget.model.itemName!,
-                                                    //   itemUnit: widget.model.unit!,
-                                                    //   imageUrl: widget.model.image!,
-                                                    //   barcode: widget.model.barcode!,
-                                                    //   quantity: 1,
-                                                    //   salesPrice: widget.model.salesPrice!
-                                                    //       .toDouble(),
-                                                    //   mrP: widget.model.mrp!.toDouble(),
-                                                    //   branchId: 1,
-                                                    // ));
-                                                    // await model.getCart(context);
-                                                    // setState(() {
-                                                    //   quantity = 1;
-                                                    // });
-                                                  },
-                                                  child: Container(
-                                                    width: MediaQuery.of(context).size.width / 4.5,
-                                                    margin:const EdgeInsets.symmetric(
-                                                        horizontal: 10),
-                                                    padding:const EdgeInsets.symmetric(
-                                                        horizontal: 3, vertical: 5),
-                                                    decoration: BoxDecoration(
-                                                        color: Colors.redAccent,
-                                                        // border:
-                                                        //     Border.all(color: greyColor),
-                                                        borderRadius:
-                                                        BorderRadius.circular(5)
-                                                    ),
-                                                    child: Center(
-                                                      child: Text(
-                                                        'Add',
-                                                        style: GoogleFonts.nunitoSans(
-                                                            color: Colors.white,
-                                                            fontSize: 15,
-                                                            fontWeight:
-                                                            FontWeight.w900),
-                                                      ),
-                                                    ),
-                                                  )),
                                             ],
                                           ),
                                         ),
-                                      );
-                                    });
-                              }),
-
-                            ],
-                          ),
-                        ),
-                      ),
+                                      ],
+                                    ),
+                                  ),
+                                  InkWell(
+                                      onTap: () async {
+                                        // dbHelper.insert(CartModel(
+                                        //   itemID: widget.model.itemID!,
+                                        //   itemName: widget.model.itemName!,
+                                        //   itemUnit: widget.model.unit!,
+                                        //   imageUrl: widget.model.image!,
+                                        //   barcode: widget.model.barcode!,
+                                        //   quantity: 1,
+                                        //   salesPrice: widget.model.salesPrice!
+                                        //       .toDouble(),
+                                        //   mrP: widget.model.mrp!.toDouble(),
+                                        //   branchId: 1,
+                                        // ));
+                                        // await model.getCart(context);
+                                        // setState(() {
+                                        //   quantity = 1;
+                                        // });
+                                      },
+                                      child: Container(
+                                        width:
+                                            MediaQuery.of(context).size.width /
+                                                4.5,
+                                        margin: const EdgeInsets.symmetric(
+                                            horizontal: 10),
+                                        padding: const EdgeInsets.symmetric(
+                                            horizontal: 3, vertical: 5),
+                                        decoration: BoxDecoration(
+                                            color: Colors.redAccent,
+                                            // border:
+                                            //     Border.all(color: greyColor),
+                                            borderRadius:
+                                                BorderRadius.circular(5)),
+                                        child: Center(
+                                          child: Text(
+                                            'Add',
+                                            style: GoogleFonts.nunitoSans(
+                                                color: Colors.white,
+                                                fontSize: 15,
+                                                fontWeight: FontWeight.w900),
+                                          ),
+                                        ),
+                                      )),
+                                ],
+                              ),
+                            )
+                          : Padding(
+                              padding: const EdgeInsets.all(10.0),
+                              child: Container(
+                                //height: 200,
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 10, vertical: 10),
+                                decoration: BoxDecoration(
+                                    color: Colors.grey[50],
+                                    // border: Border.all(
+                                    //     color:
+                                    //     Color.fromRGBO(211, 211, 207, 1)),
+                                    borderRadius: BorderRadius.circular(12)),
+                                //height: 50,
+                                //margin: const EdgeInsets.symmetric(vertical: 0),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Padding(
+                                      padding: const EdgeInsets.symmetric(
+                                          vertical: 5.0),
+                                      child: Text(
+                                        'Please select a variant',
+                                        style: GoogleFonts.nunitoSans(
+                                            fontWeight: FontWeight.w800,
+                                            fontSize: 15,
+                                            color: Colors.black),
+                                      ),
+                                    ),
+                                    ListView.builder(
+                                        scrollDirection: Axis.vertical,
+                                        shrinkWrap: true,
+                                        physics:
+                                            const NeverScrollableScrollPhysics(),
+                                        itemCount: model
+                                            .productDetail.variantList!.length,
+                                        itemBuilder: (ctx, index) {
+                                          return InkWell(
+                                            onTap: () {
+                                              // navigateToPage(context,
+                                              //     ProductDetails(model: randomList[index],));
+                                            },
+                                            child: Container(
+                                              decoration: BoxDecoration(
+                                                  color: Colors.white,
+                                                  border: Border.all(
+                                                      width: 2,
+                                                      color: Colors.indigo),
+                                                  borderRadius:
+                                                      BorderRadius.circular(5)),
+                                              margin:
+                                                  const EdgeInsets.symmetric(
+                                                      vertical: 5),
+                                              padding:
+                                                  const EdgeInsets.symmetric(
+                                                      vertical: 10),
+                                              child: Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment
+                                                        .spaceBetween,
+                                                children: [
+                                                  SizedBox(
+                                                    width:
+                                                        MediaQuery.of(context)
+                                                                .size
+                                                                .width /
+                                                            1.7,
+                                                    child: Column(
+                                                      children: [
+                                                        Text(
+                                                          //model.productDetail.variants?.first.itemName ?? "error",
+                                                          model
+                                                                  .productDetail
+                                                                  .variantList![
+                                                                      index]
+                                                                  .itemName ??
+                                                              "No name",
+                                                          style: GoogleFonts
+                                                              .nunitoSans(
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .w800,
+                                                                  fontSize: 15),
+                                                        ),
+                                                        const SizedBox(
+                                                          height: 10,
+                                                        ),
+                                                        Padding(
+                                                          padding:
+                                                              const EdgeInsets
+                                                                      .symmetric(
+                                                                  horizontal:
+                                                                      10.0),
+                                                          child: Row(
+                                                            children: [
+                                                              Text(
+                                                                  rupeeSymbol +
+                                                                      model
+                                                                          .productDetail
+                                                                          .variantList![
+                                                                              index]
+                                                                          .specialPrice!
+                                                                          .toStringAsFixed(
+                                                                              2),
+                                                                  style: GoogleFonts.nunitoSans(
+                                                                      fontWeight:
+                                                                          FontWeight
+                                                                              .w700,
+                                                                      fontSize:
+                                                                          14)),
+                                                              const SizedBox(
+                                                                width: 5,
+                                                              ),
+                                                              Text(
+                                                                  rupeeSymbol +
+                                                                      // (model.productDetail.specialPrice!+5)
+                                                                      model
+                                                                          .productDetail
+                                                                          .variantList![
+                                                                              index]
+                                                                          .unitPrice!
+                                                                          .toStringAsFixed(
+                                                                              2),
+                                                                  style: GoogleFonts.nunitoSans(
+                                                                      fontWeight:
+                                                                          FontWeight
+                                                                              .w500,
+                                                                      fontSize:
+                                                                          13,
+                                                                      color:
+                                                                          greyColor,
+                                                                      decoration:
+                                                                          TextDecoration
+                                                                              .lineThrough)),
+                                                              Container(
+                                                                margin: const EdgeInsets
+                                                                        .symmetric(
+                                                                    horizontal:
+                                                                        5),
+                                                                padding:
+                                                                    const EdgeInsets
+                                                                        .all(5),
+                                                                decoration: BoxDecoration(
+                                                                    color: Colors
+                                                                        .indigo,
+                                                                    borderRadius:
+                                                                        BorderRadius.circular(
+                                                                            5.0)),
+                                                                //height: 65,
+                                                                //width: 65,
+                                                                child: Center(
+                                                                  child: Text(
+                                                                    '4 % OFF',
+                                                                    //'${getDiscount(widget.model.salesPrice!, widget.model.mrp!)}% OFF',
+                                                                    textAlign:
+                                                                        TextAlign
+                                                                            .center,
+                                                                    style: GoogleFonts.nunitoSans(
+                                                                        color: Colors
+                                                                            .white,
+                                                                        fontWeight:
+                                                                            FontWeight
+                                                                                .w700,
+                                                                        fontSize:
+                                                                            11),
+                                                                  ),
+                                                                ),
+                                                              ),
+                                                            ],
+                                                          ),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  ),
+                                                  InkWell(
+                                                      onTap: () async {
+                                                        // dbHelper.insert(CartModel(
+                                                        //   itemID: widget.model.itemID!,
+                                                        //   itemName: widget.model.itemName!,
+                                                        //   itemUnit: widget.model.unit!,
+                                                        //   imageUrl: widget.model.image!,
+                                                        //   barcode: widget.model.barcode!,
+                                                        //   quantity: 1,
+                                                        //   salesPrice: widget.model.salesPrice!
+                                                        //       .toDouble(),
+                                                        //   mrP: widget.model.mrp!.toDouble(),
+                                                        //   branchId: 1,
+                                                        // ));
+                                                        // await model.getCart(context);
+                                                        // setState(() {
+                                                        //   quantity = 1;
+                                                        // });
+                                                      },
+                                                      child: Container(
+                                                        width: MediaQuery.of(
+                                                                    context)
+                                                                .size
+                                                                .width /
+                                                            4.5,
+                                                        margin: const EdgeInsets
+                                                                .symmetric(
+                                                            horizontal: 10),
+                                                        padding:
+                                                            const EdgeInsets
+                                                                    .symmetric(
+                                                                horizontal: 3,
+                                                                vertical: 5),
+                                                        decoration:
+                                                            BoxDecoration(
+                                                                color: Colors
+                                                                    .redAccent,
+                                                                // border:
+                                                                //     Border.all(color: greyColor),
+                                                                borderRadius:
+                                                                    BorderRadius
+                                                                        .circular(
+                                                                            5)),
+                                                        child: Center(
+                                                          child: Text(
+                                                            'Add',
+                                                            style: GoogleFonts
+                                                                .nunitoSans(
+                                                                    color: Colors
+                                                                        .white,
+                                                                    fontSize:
+                                                                        15,
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .w900),
+                                                          ),
+                                                        ),
+                                                      )),
+                                                ],
+                                              ),
+                                            ),
+                                          );
+                                        }),
+                                  ],
+                                ),
+                              ),
+                            ),
                       ExpansionTile(
                         title: Text(
                           'About Product',
@@ -607,10 +758,6 @@ class _ProductDetailsState extends State<ProductDetails> {
                           // ),
                         ],
                       ),
-
-                      // SizedBox(
-                      //   height: 80,
-                      // ),
                     ],
                   );
                 }),
