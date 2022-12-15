@@ -6,6 +6,7 @@ import 'package:kmshoppy/provider/slider_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../db/db_functions.dart';
 import '../resources/app_utils.dart';
 import '../resources/colors.dart';
 import '../resources/colors.dart';
@@ -38,6 +39,7 @@ class _HomepageState extends State<Homepage> {
     // TODO: implement initState
     super.initState();
     getCategories();
+    getDbData();
   }
 
   getCategories() async {
@@ -74,7 +76,30 @@ class _HomepageState extends State<Homepage> {
         },
         child: SafeArea(
           child: isLoading
-              ? Center(child: appLoading())
+              ? Center(child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  appLoading(),
+                  const SizedBox(height: 30,),
+                  InkWell(
+                    onTap: (){
+                      getCategories();
+                      getDbData();
+                    },
+                    child: Container(
+                      padding: EdgeInsets.all(10),
+                      decoration: BoxDecoration(
+                          color: Colors.grey[300],
+                          borderRadius: BorderRadius.circular(3)),
+                      child: Text(
+                        'Try again',
+                        style: GoogleFonts.nunitoSans(
+                            color: Colors.black,fontSize: 15,fontWeight: FontWeight.w700),
+                      ),
+                    ),
+                  )
+                ],
+              ))
               : SingleChildScrollView(
                   child: Column(
                     // crossAxisAlignment: CrossAxisAlignment.start,
@@ -137,7 +162,7 @@ class _HomepageState extends State<Homepage> {
                                 // navigateToPage(context, SearchPage())
                               },
                               child: Container(
-                                padding: EdgeInsets.symmetric(horizontal: 20),
+                                padding:const EdgeInsets.symmetric(horizontal: 20),
                                 decoration: BoxDecoration(
                                     color: Colors.white,
                                     border: Border.all(
@@ -193,18 +218,18 @@ class _HomepageState extends State<Homepage> {
                         return buildIndicator(
                             activeIndex, model.sliderList);
                       }),
-                      const FeaturedItems(),
+                      const FeaturedItems(title: 'Featured products',inHome: true),
                       const HomeFooter(),
                       // ShopByCategory(),
-                      const SizedBox(
-                        height: 0,
-                      )
+                      // const SizedBox(
+                      //   height: 0,
+                      // )
                     ],
                   ),
                 ),
         ),
       ),
-      bottomNavigationBar: const BottomBarListWidget(),
+      bottomNavigationBar: const BottomBarListWidget(ind: 0,inDetailPage: false),
     );
   }
   @override

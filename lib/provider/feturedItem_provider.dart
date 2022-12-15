@@ -18,39 +18,12 @@ class ItemProvider with ChangeNotifier{
   }
   // void addVariants(String response) {
   //   final decode = jsonDecode(response);
-  //   if (decode != null) {
-  //     variantList = VariantModel.fromJson(decode['Data']['ProdDetails']);
-  //     notifyListeners();
-  //   }
-  // }
-
-  void addVariants(String response) {
-    final decode = jsonDecode(response);
-    //print("decode=$decode");
-    final privilege = decode['Data']['ProdDetails'];
-    //print("privilege========================================$privilege");
-    final variant = jsonEncode(decode['Data']['ProdDetails']['variationJson']);
-    final parsedJson = json.decode(variant);
-    //final parsedJson = variant;
-    //final value = parsedJson['Attrname'];
-    print("value=$variant");
-    print("value=$parsedJson");
-   //   final parsedJson = jsonDecode(decode['Data']['ProdDetails']['ProductCategories']);
-   //  print("parsedJson=$parsedJson");
-    //final privilege = parsedJson['Data']['ProdDetails']['variationJson'];
-    //print("privilege=$privilege");
-  //   if (decode != null) {
-  //     // var branches = [];
-  //     // branches = decode['Data']['ProdDetails'].map((items) {
-  //     //   return VariantModel.fromJson(items);
-  //     // }).toList();
-  //      variantList = List<VariantModel>.from(variant);
-  //   //   print("VariantModel=$VariantModel");
-  //   //   notifyListeners();
-  //   // }
-  //   // print('frequentItemList=$frequentItemList');
-  //   print('frequentItemList.length${frequentItemList.length}');
-   }
+  //   //print("decode=$decode");
+  //   final privilege = decode['Data']['ProdDetails'];
+  //   //print("privilege========================================$privilege");
+  //   final variant = jsonEncode(decode['Data']['ProdDetails']['variationJson']);
+  //   final parsedJson = json.decode(variant);
+  //  }
   void addFrequentItems(String response) {
     final decode = jsonDecode(response);
     if (decode != null) {
@@ -61,7 +34,6 @@ class ItemProvider with ChangeNotifier{
       frequentItemList = List<ItemModel>.from(branches);
       notifyListeners();
     }
-    // print('frequentItemList=$frequentItemList');
-    print('frequentItemList.length${frequentItemList.length}');
+    //print('frequentItemList.length${frequentItemList.length}');
   }
 }

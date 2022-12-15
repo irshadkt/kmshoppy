@@ -4,6 +4,8 @@ part 'db_model.g.dart';
 @HiveType(typeId: 1)
 class DbCartModel {
   @HiveField(0)
+    int? keyId;
+  @HiveField(1)
   final int itemID;
   @HiveField(2)
   final String itemName;
@@ -11,25 +13,24 @@ class DbCartModel {
   @HiveField(3)
   final String imageUrl;
   @HiveField(4)
-  final String itemUnit;
-  @HiveField(5)
   final int quantity;
-  @HiveField(6)
+  @HiveField(5)
   final double specialPrice;
-  @HiveField(7)
+  @HiveField(6)
   final double unitPrice;
-  int? key;
+  @HiveField(7)
+  final String urlKey;
 
   DbCartModel({
+    this.keyId,
     required this.itemName,
     //required this.barcode,
     required this.imageUrl,
-    required this.itemUnit,
     required this.unitPrice,
     required this.specialPrice,
     required this.itemID,
     required this.quantity,
-    this.key
+    required this.urlKey
 
   });
 }

@@ -1,19 +1,27 @@
+import 'package:badges/badges.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:kmshoppy/models/cart_model.dart';
 import 'package:kmshoppy/provider/feturedItem_provider.dart';
 import 'package:provider/provider.dart';
+import '../db/db_functions.dart';
+import '../db/db_model.dart';
 import '../models/feturedItem_model.dart';
+import '../provider/cart_provider.dart';
 import '../resources/app_utils.dart';
 import '../resources/colors.dart';
 import '../resources/constatnts.dart';
 import '../services/dioHelper.dart';
+import '../widgets/featured_items.dart';
+import 'cart/my_cart.dart';
 
 class ProductDetails extends StatefulWidget {
-  final ItemModel model;
+ // final ItemModel model;
   final bool fromCart;
-  //final String urlKey;
+  final String urlKey;
+  final int itemId;
 
-  const ProductDetails({Key? key, this.fromCart = false, required this.model})
+  const ProductDetails({Key? key, this.fromCart = false,  required this.urlKey, required this.itemId})
       : super(key: key);
 
   @override
@@ -33,7 +41,7 @@ class _ProductDetailsState extends State<ProductDetails> {
         isLoading = true;
       });
     }
-    await DioHelper().getProductDetails(context, widget.model.urlKey);
+    await DioHelper().getProductDetails(context, widget.urlKey);
     if (mounted) {
       setState(() {
         isLoading = false;
@@ -84,10 +92,39 @@ class _ProductDetailsState extends State<ProductDetails> {
                             const SizedBox(
                               width: 20,
                             ),
-                            const Icon(
-                              Icons.shopping_cart_outlined,
-                              color: Colors.black,
-                            )
+                            ValueListenableBuilder(
+                                valueListenable: cartListNotifier,
+                                builder: (BuildContext ctx,
+                                    List<DbCartModel> cartList, Widget? child) {
+                                  int iconCount = cartList.length;
+                                  return Badge(
+                                      // position: BadgePosition(top: 0,bottom: 8),
+                                      //showBadge: true,
+                                      showBadge: iconCount == 0 ? false : true,
+                                      badgeColor: Colors.red[500]!,
+                                      badgeContent: Text(
+                                        iconCount.toString(),
+                                        style: const TextStyle(
+                                            color: Colors.white),
+                                      ),
+                                      child: IconButton(
+                                          onPressed: () {
+                                            if(widget.fromCart){
+                                              Navigator.pop(context);
+                                            }else{
+                                              navigateToPage(
+                                                  context,
+                                                  const MyCart(
+                                                    inDetail: true,
+                                                  ));
+                                            }
+
+                                          },
+                                          icon: const Icon(
+                                            Icons.shopping_cart_outlined,
+                                            color: Colors.black,
+                                          )));
+                                }),
                           ],
                         ),
                       ),
@@ -165,194 +202,6 @@ class _ProductDetailsState extends State<ProductDetails> {
                               ],
                             ),
                             //quantity == 0,
-                            // Consumer<CartProvider>(builder: (context, model, _) {
-                            //   if (widget.model.salesPrice == 0.0) {
-                            //     return const SizedBox();
-                            //   } else if (widget.model.stock == 0.0) {
-                            //     return Text(
-                            //       'Out Of Stock',
-                            //       style: GoogleFonts.nunitoSans(
-                            //           color: primaryRed,
-                            //           fontSize: 16,
-                            //           fontWeight: FontWeight.w500),
-                            //     );
-                            //   } else {
-                            //     return model.cartList.any((element) =>
-                            //     element.itemID == widget.model.itemID)
-                            //         ? Container(
-                            //       // width: 100,
-                            //       margin:
-                            //       EdgeInsets.symmetric(horizontal: 15),
-                            //       // padding: EdgeInsets.symmetric(
-                            //       //     horizontal: 15, vertical: 5),
-                            //       decoration: BoxDecoration(
-                            //           border: Border.all(color: greyColor),
-                            //           borderRadius:
-                            //           BorderRadius.circular(20)),
-                            //       child: Row(
-                            //         mainAxisSize: MainAxisSize.min,
-                            //         mainAxisAlignment:
-                            //         MainAxisAlignment.spaceBetween,
-                            //         children: [
-                            //           SizedBox(
-                            //             height: 35,
-                            //             width: 35,
-                            //             child: IconButton(
-                            //               icon: Image.asset(
-                            //                 removeRed,
-                            //               ),
-                            //               onPressed: () async {
-                            //                 // if (quantity > 0) {
-                            //                 //   setState(() {
-                            //                 //     quantity--;
-                            //                 //   });
-                            //                 // }
-                            //                 if (model.cartList
-                            //                     .firstWhere((element) =>
-                            //                 element.itemID ==
-                            //                     widget.model.itemID)
-                            //                     .quantity >
-                            //                     1) {
-                            //                   setState(() {
-                            //                     quantity--;
-                            //                   });
-                            //                   dbHelper.updateCart(CartModel(
-                            //                     branchId: 1,
-                            //                     itemID:
-                            //                     widget.model.itemID!,
-                            //                     itemName:
-                            //                     widget.model.itemName!,
-                            //                     itemUnit:
-                            //                     widget.model.unit!,
-                            //                     imageUrl:
-                            //                     widget.model.image!,
-                            //                     barcode:
-                            //                     widget.model.barcode!,
-                            //                     quantity: model.cartList
-                            //                         .firstWhere(
-                            //                             (element) =>
-                            //                         element
-                            //                             .itemID ==
-                            //                             widget.model
-                            //                                 .itemID)
-                            //                         .quantity -
-                            //                         1,
-                            //                     salesPrice: widget
-                            //                         .model.salesPrice
-                            //                         ?.toDouble(),
-                            //                     mrP: widget.model.mrp!
-                            //                         .toDouble(),
-                            //                   ));
-                            //                 } else {
-                            //                   dbHelper.deleteCartItem(
-                            //                       widget.model.itemID);
-                            //                 }
-                            //                 await model.getCart(context);
-                            //               },
-                            //             ),
-                            //           ),
-                            //           Padding(
-                            //             padding: const EdgeInsets.symmetric(
-                            //                 horizontal: 8.0),
-                            //             child: Text(
-                            //               '${model.cartList.firstWhere((element) => element.itemID == widget.model.itemID).quantity}',
-                            //               style: GoogleFonts.nunitoSans(
-                            //                   fontWeight: FontWeight.w700,
-                            //                   fontSize: 16),
-                            //             ),
-                            //           ),
-                            //           SizedBox(
-                            //             height: 35,
-                            //             width: 35,
-                            //             child: IconButton(
-                            //               icon: Image.asset(
-                            //                 addRed,
-                            //               ),
-                            //               onPressed: () async {
-                            //                 // setState(() {
-                            //                 //   quantity++;
-                            //                 // });
-                            //                 dbHelper.updateCart(CartModel(
-                            //                   itemID: widget.model.itemID!,
-                            //                   itemName:
-                            //                   widget.model.itemName!,
-                            //                   itemUnit: widget.model.unit!,
-                            //                   imageUrl: widget.model.image!,
-                            //                   barcode:
-                            //                   widget.model.barcode!,
-                            //                   quantity: model.cartList
-                            //                       .firstWhere(
-                            //                           (element) =>
-                            //                       element
-                            //                           .itemID ==
-                            //                           widget.model
-                            //                               .itemID!)
-                            //                       .quantity +
-                            //                       1,
-                            //                   salesPrice: widget
-                            //                       .model.salesPrice!
-                            //                       .toDouble(),
-                            //                   mrP: widget.model.mrp!
-                            //                       .toDouble(),
-                            //                   branchId: 1,
-                            //                 ));
-                            //                 await model.getCart(context);
-                            //               },
-                            //             ),
-                            //           ),
-                            //         ],
-                            //       ),
-                            //     )
-                            //         : InkWell(
-                            //         onTap: () async {
-                            //           dbHelper.insert(CartModel(
-                            //             itemID: widget.model.itemID!,
-                            //             itemName: widget.model.itemName!,
-                            //             itemUnit: widget.model.unit!,
-                            //             imageUrl: widget.model.image!,
-                            //             barcode: widget.model.barcode!,
-                            //             quantity: 1,
-                            //             salesPrice: widget.model.salesPrice!
-                            //                 .toDouble(),
-                            //             mrP: widget.model.mrp!.toDouble(),
-                            //             branchId: 1,
-                            //           ));
-                            //           await model.getCart(context);
-                            //           setState(() {
-                            //             quantity = 1;
-                            //           });
-                            //         },
-                            //         child: Container(
-                            //           width: 100,
-                            //           margin: EdgeInsets.symmetric(
-                            //               horizontal: 15),
-                            //           padding: EdgeInsets.symmetric(
-                            //               horizontal: 15, vertical: 5),
-                            //           decoration: BoxDecoration(
-                            //               border:
-                            //               Border.all(color: greyColor),
-                            //               borderRadius:
-                            //               BorderRadius.circular(20)),
-                            //           child: Row(
-                            //             mainAxisAlignment:
-                            //             MainAxisAlignment.spaceBetween,
-                            //             children: [
-                            //               Text(
-                            //                 'Add',
-                            //                 style: GoogleFonts.nunitoSans(
-                            //                     color: Colors.black,
-                            //                     fontSize: 16,
-                            //                     fontWeight: FontWeight.w700),
-                            //               ),
-                            //               Image.asset(
-                            //                 addRed,
-                            //                 width: 20,
-                            //               )
-                            //             ],
-                            //           ),
-                            //         ));
-                            //   }
-                            // }),
                           ],
                         ),
                       ),
@@ -438,49 +287,238 @@ class _ProductDetailsState extends State<ProductDetails> {
                                       ],
                                     ),
                                   ),
-                                  InkWell(
-                                      onTap: () async {
-                                        // dbHelper.insert(CartModel(
-                                        //   itemID: widget.model.itemID!,
-                                        //   itemName: widget.model.itemName!,
-                                        //   itemUnit: widget.model.unit!,
-                                        //   imageUrl: widget.model.image!,
-                                        //   barcode: widget.model.barcode!,
-                                        //   quantity: 1,
-                                        //   salesPrice: widget.model.salesPrice!
-                                        //       .toDouble(),
-                                        //   mrP: widget.model.mrp!.toDouble(),
-                                        //   branchId: 1,
-                                        // ));
-                                        // await model.getCart(context);
-                                        // setState(() {
-                                        //   quantity = 1;
-                                        // });
-                                      },
-                                      child: Container(
-                                        width:
-                                            MediaQuery.of(context).size.width /
-                                                4.5,
-                                        margin: const EdgeInsets.symmetric(
-                                            horizontal: 10),
-                                        padding: const EdgeInsets.symmetric(
-                                            horizontal: 3, vertical: 5),
-                                        decoration: BoxDecoration(
-                                            color: Colors.redAccent,
-                                            // border:
-                                            //     Border.all(color: greyColor),
-                                            borderRadius:
-                                                BorderRadius.circular(5)),
-                                        child: Center(
-                                          child: Text(
-                                            'Add',
-                                            style: GoogleFonts.nunitoSans(
-                                                color: Colors.white,
-                                                fontSize: 15,
-                                                fontWeight: FontWeight.w900),
-                                          ),
-                                        ),
-                                      )),
+                                  ValueListenableBuilder(
+                                      valueListenable: cartListNotifier,
+                                      builder: (BuildContext ctx,
+                                          List<DbCartModel> cartList,
+                                          Widget? child) {
+                                        return cartList.any((element) =>
+                                                element.itemID ==
+                                                widget.itemId)
+                                            ? Container(
+                                                // width: 100,
+                                                margin:
+                                                    const EdgeInsets.symmetric(
+                                                        horizontal: 15),
+                                                // padding: EdgeInsets.symmetric(
+                                                //     horizontal: 15, vertical: 5),
+                                                decoration: BoxDecoration(
+                                                  color: Colors.pink,
+                                                    // border: Border.all(
+                                                    //     color: greyColor),
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            5)),
+                                                child: Row(
+                                                  mainAxisSize:
+                                                      MainAxisSize.min,
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment
+                                                          .spaceBetween,
+                                                  children: [
+                                                    SizedBox(
+                                                      height: 35,
+                                                      width: 35,
+                                                      child: IconButton(
+                                                        icon: const Icon(
+                                                          Icons.remove,
+                                                          color: Colors.white,
+                                                        ),
+                                                        onPressed: () async {
+                                                          final int index =
+                                                              cartList.indexWhere(
+                                                                  (element) =>
+                                                                      element
+                                                                          .itemID ==
+                                                                      widget.itemId,
+                                                                  0);
+                                                          final data =
+                                                              cartList[index];
+                                                          print("index=$index");
+                                                          if (cartList
+                                                                  .firstWhere((element) =>
+                                                                      element
+                                                                          .itemID ==
+                                                                      widget
+                                                                          .itemId)
+                                                                  .quantity >
+                                                              1) {
+                                                            setState(() {
+                                                              quantity--;
+                                                            });
+                                                            updateCartItem(
+                                                                DbCartModel(
+                                                              keyId:
+                                                                  data.keyId!,
+                                                              itemName: model
+                                                                  .productDetail
+                                                                  .itemName!,
+                                                              imageUrl: model
+                                                                  .productDetail
+                                                                  .image!,
+                                                              unitPrice: model
+                                                                  .productDetail
+                                                                  .unitPrice!,
+                                                              itemID: model
+                                                                  .productDetail
+                                                                  .itemID!,
+                                                              specialPrice: model
+                                                                  .productDetail
+                                                                  .specialPrice!,
+                                                              quantity: cartList
+                                                                      .firstWhere((element) =>
+                                                                          element
+                                                                              .itemID ==
+                                                                          widget.itemId)
+                                                                      .quantity -
+                                                                  1,
+                                                                  urlKey: model
+                                                                      .productDetail.urlKey!,
+                                                            ));
+                                                          } else {
+                                                            if (data.keyId !=
+                                                                null) {
+                                                              removeItem(
+                                                                  data.keyId!);
+                                                              //allClear();
+                                                              print(
+                                                                  "delete success");
+                                                            } else {
+                                                              print(
+                                                                  "id is null");
+                                                            }
+                                                          }
+                                                        },
+                                                      ),
+                                                    ),
+                                                    Padding(
+                                                      padding: const EdgeInsets
+                                                              .symmetric(
+                                                          horizontal: 8.0),
+                                                      child: Text(
+                                                        '${cartList.firstWhere((element) => element.itemID == widget.itemId).quantity}',
+                                                        style: GoogleFonts
+                                                            .nunitoSans(
+                                                          color: Colors.white,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .w700,
+                                                                fontSize: 16),
+                                                      ),
+                                                    ),
+                                                    SizedBox(
+                                                      height: 35,
+                                                      width: 35,
+                                                      child: IconButton(
+                                                        icon: const Icon(
+                                                            Icons.add,
+                                                            color: Colors.white),
+                                                        onPressed: () async {
+                                                          final int index =
+                                                              cartList.indexWhere(
+                                                                  (element) =>
+                                                                      element
+                                                                          .itemID ==
+                                                                      widget.itemId,
+                                                                  0);
+                                                          final data =
+                                                              cartList[index];
+                                                          print("index=$index");
+                                                          setState(() {
+                                                            quantity++;
+                                                          });
+                                                          updateCartItem(
+                                                              DbCartModel(
+                                                            keyId: data.keyId!,
+                                                            itemName: model
+                                                                .productDetail
+                                                                .itemName!,
+                                                            imageUrl: model
+                                                                .productDetail
+                                                                .image!,
+                                                            unitPrice: model
+                                                                .productDetail
+                                                                .unitPrice!,
+                                                            itemID: model
+                                                                .productDetail
+                                                                .itemID!,
+                                                            specialPrice: model
+                                                                .productDetail
+                                                                .specialPrice!,
+                                                            quantity: cartList
+                                                                    .firstWhere((element) =>
+                                                                        element
+                                                                            .itemID ==
+                                                                        widget.itemId)
+                                                                    .quantity +
+                                                                1,
+                                                                urlKey: model
+                                                                    .productDetail.urlKey!,
+                                                          ));
+
+                                                          // await model.getCart(context);
+                                                        },
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
+                                              )
+                                            : InkWell(
+                                                onTap: () async {
+                                                  addItem(DbCartModel(
+                                                      itemName: model
+                                                          .productDetail
+                                                          .itemName!,
+                                                      imageUrl: model
+                                                          .productDetail.image!,
+                                                      unitPrice: model
+                                                          .productDetail
+                                                          .unitPrice!,
+                                                      itemID: model
+                                                          .productDetail
+                                                          .itemID!,
+                                                      specialPrice: model
+                                                          .productDetail
+                                                          .specialPrice!,
+                                                      quantity: 1,
+                                                    urlKey: model
+                                                        .productDetail.urlKey!,));
+                                                  //await model.getCart(context);
+                                                  setState(() {
+                                                    quantity = 1;
+                                                  });
+                                                },
+                                                child: Container(
+                                                  width: 100,
+                                                  margin: const EdgeInsets
+                                                          .symmetric(
+                                                      horizontal: 15),
+                                                  padding: const EdgeInsets
+                                                          .symmetric(
+                                                      horizontal: 15,
+                                                      vertical: 5),
+                                                  decoration: BoxDecoration(
+                                                      color: Colors.pink,
+                                                      // border:
+                                                      // Border.all(color: greyColor),
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              5)),
+                                                  child: Center(
+                                                    child: Text(
+                                                      'Add',
+                                                      style: GoogleFonts
+                                                          .nunitoSans(
+                                                              color:
+                                                                  Colors.white,
+                                                              fontSize: 16,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .w700),
+                                                    ),
+                                                  ),
+                                                ));
+                                      }),
                                 ],
                               ),
                             )
@@ -693,7 +731,7 @@ class _ProductDetailsState extends State<ProductDetails> {
                                                         decoration:
                                                             BoxDecoration(
                                                                 color: Colors
-                                                                    .redAccent,
+                                                                    .pink,
                                                                 // border:
                                                                 //     Border.all(color: greyColor),
                                                                 borderRadius:
@@ -758,6 +796,7 @@ class _ProductDetailsState extends State<ProductDetails> {
                           // ),
                         ],
                       ),
+                      const FeaturedItems(title: 'You Might Also Like',inHome: false),
                     ],
                   );
                 }),

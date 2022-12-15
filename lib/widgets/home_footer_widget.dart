@@ -10,17 +10,17 @@ class HomeFooter extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.all(10.0),
+      padding: const EdgeInsets.symmetric(horizontal: 10.0),
       child: Container(
         padding:const EdgeInsets.symmetric(horizontal: 10),
         decoration: BoxDecoration(
-            color: secondaryYellow,
+            color: Colors.blue[50],
             // border: Border.all(
             //     color:
             //     Color.fromRGBO(211, 211, 207, 1)),
             borderRadius: BorderRadius.circular(12)),
         //height: 50,
-        margin:const EdgeInsets.symmetric(vertical: 8),
+        margin:const EdgeInsets.symmetric(vertical: 0),
         child: Row(
           children: [
             SizedBox(
@@ -33,6 +33,8 @@ class HomeFooter extends StatelessWidget {
                 ],
               ),
             ),
+            const Spacer(),
+            Icon(Icons.shopping_cart_outlined,size: 80,color: Colors.pink[200],),
           ],
         ),
       ),
@@ -46,7 +48,7 @@ class HomeFooter extends StatelessWidget {
                   contentPadding: EdgeInsets.zero,
                   leading: CircleAvatar(
                     radius: 15,
-                    backgroundColor: Colors.greenAccent,
+                    backgroundColor: Colors.green[300],
                     child: Center(
                       child: Icon(
                         icon,
