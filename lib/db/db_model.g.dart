@@ -17,34 +17,37 @@ class DbCartModelAdapter extends TypeAdapter<DbCartModel> {
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
     return DbCartModel(
+      keyId: fields[0] as int?,
       itemName: fields[2] as String,
       imageUrl: fields[3] as String,
-      itemUnit: fields[4] as String,
-      unitPrice: fields[7] as double,
-      specialPrice: fields[6] as double,
-      itemID: fields[0] as int,
-      quantity: fields[5] as int,
+      unitPrice: fields[6] as double,
+      specialPrice: fields[5] as double,
+      itemID: fields[1] as int,
+      quantity: fields[4] as int,
+      urlKey: fields[7] as String,
     );
   }
 
   @override
   void write(BinaryWriter writer, DbCartModel obj) {
     writer
-      ..writeByte(7)
+      ..writeByte(8)
       ..writeByte(0)
+      ..write(obj.keyId)
+      ..writeByte(1)
       ..write(obj.itemID)
       ..writeByte(2)
       ..write(obj.itemName)
       ..writeByte(3)
       ..write(obj.imageUrl)
       ..writeByte(4)
-      ..write(obj.itemUnit)
-      ..writeByte(5)
       ..write(obj.quantity)
-      ..writeByte(6)
+      ..writeByte(5)
       ..write(obj.specialPrice)
+      ..writeByte(6)
+      ..write(obj.unitPrice)
       ..writeByte(7)
-      ..write(obj.unitPrice);
+      ..write(obj.urlKey);
   }
 
   @override

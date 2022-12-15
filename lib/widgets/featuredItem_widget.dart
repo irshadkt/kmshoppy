@@ -26,78 +26,139 @@ class _FrequentItemBlockState extends State<FrequentItemBlock> {
   Widget build(BuildContext context) {
     return Stack(
       children: [
-        Card(
-          elevation: 10,
-          shadowColor: Colors.blue[50],
-          margin: const EdgeInsets.symmetric(horizontal: 5, vertical: 10),
-          shape:
-          RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
-          color: Colors.white,
-          child: Container(
-            padding: const EdgeInsets.symmetric(horizontal: 10),
-            width: MediaQuery.of(context).size.width/3.5,
-             //height: MediaQuery.of(context).size.height/4,
-             //height: 380,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Container(
-                  //height: 90,
-                  height: MediaQuery.of(context).size.height/9,
-                  margin: const EdgeInsets.only(top: 5),
-                  padding: const EdgeInsets.only(top: 10),
-                  child: Center(
-                    child: CachedNetworkImage(
-                      imageUrl: "$mediaUrl${widget.data.image!}",
-                      fit: BoxFit.cover,
-                      // placeholder: (ctx, url) => Center(
-                      //   child: appLoading(),
-                      // ),
-                      progressIndicatorBuilder: (ctx, url, progress) => Center(
-                        child: appLoading(value: progress.progress),
+        Row(
+          children: [
+            Card(
+              elevation: 10,
+              shadowColor: Colors.blue[50],
+              margin: const EdgeInsets.symmetric(horizontal: 0, vertical: 15),
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10.0)),
+              color: Colors.white,
+              child: Container(
+                padding: const EdgeInsets.symmetric(horizontal: 8),
+                width: MediaQuery.of(context).size.width / 3.4,
+                //height: MediaQuery.of(context).size.height/4,
+                //height: 380,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Container(
+                      //height: 90,
+                      height: MediaQuery.of(context).size.height / 9,
+                      margin: const EdgeInsets.only(top: 5),
+                      padding: const EdgeInsets.only(top: 10),
+                      child: Center(
+                        child: CachedNetworkImage(
+                            imageUrl: "$mediaUrl${widget.data.image!}",
+                            fit: BoxFit.cover,
+                            // placeholder: (ctx, url) => Center(
+                            //   child: appLoading(),
+                            // ),
+                            progressIndicatorBuilder: (ctx, url, progress) =>
+                                Center(
+                                  child: appLoading(value: progress.progress),
+                                ),
+                            errorWidget: (context, url, error) =>
+                                Icon(Icons.image)
+                            //     Image.asset(
+                            //   noImage,
+                            //   // width: 80,
+                            // ),
+                            ),
                       ),
-                      errorWidget: (context, url, error) =>  Icon(Icons.image)
-                      //     Image.asset(
-                      //   noImage,
-                      //   // width: 80,
-                      // ),
                     ),
-                  ),
+                    Text(
+                      widget.data.itemName!,
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                      style: GoogleFonts.nunitoSans(
+                          fontWeight: FontWeight.w700, fontSize: 14),
+                    ),
+                    Text(
+                        rupeeSymbol +
+                            (widget.data.salesPrice! + 5).toStringAsFixed(2),
+                        style: GoogleFonts.nunitoSans(
+                            fontWeight: FontWeight.w500,
+                            fontSize: 12,
+                            color: greyColor,
+                            decoration: TextDecoration.lineThrough)),
+                    Text(
+                      '₹${widget.data.salesPrice!.toStringAsFixed(2)}',
+                      style: GoogleFonts.nunitoSans(
+                        fontWeight: FontWeight.w800,
+                        fontSize: 15,
+                      ),
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          '1 Pack',
+                          style: GoogleFonts.nunitoSans(
+                            fontWeight: FontWeight.w900,
+                            fontSize: 15,
+                          ),
+                        ),
+                        Card(
+                          elevation: 4,
+                          child: Icon(Icons.add, color: Colors.red),
+                        ),
+                      ],
+                    ),
+                  ],
                 ),
-                Text(
-                  widget.data.itemName!,
-                  maxLines: 2,
-                  overflow: TextOverflow.ellipsis,
-                  style: GoogleFonts.nunitoSans(
-                      fontWeight: FontWeight.w700, fontSize: 14),
-                ),
-                Text(
-                    rupeeSymbol +
-                        (widget.data.salesPrice!+5).toStringAsFixed(2),
-                    style: GoogleFonts.nunitoSans(
-                        fontWeight: FontWeight.w500,
-                        fontSize: 12,
-                        color: greyColor,
-                        decoration: TextDecoration.lineThrough)),
-                Text(
-                  '₹${widget.data.salesPrice!.toStringAsFixed(2)}',
-                  style: GoogleFonts.nunitoSans(
-                    fontWeight: FontWeight.w800,
-                    fontSize: 15,
-                  ),
-                ),
-                Text(
-                  '1 Pack',
-                  style: GoogleFonts.nunitoSans(
-                    fontWeight: FontWeight.w900,
-                    fontSize: 15,
-                  ),
-                ),
-              ],
+              ),
             ),
-          ),
+            SizedBox(
+              width: 15,
+            )
+          ],
         ),
+        Positioned(
+          top: 20,
+          left: 10,
+          child: Icon(Icons.favorite_outline_sharp, color: Colors.red[200]),
+        ),
+        // Image.asset("lib/images/discountsheet.jpg",height: 40,)
+        Positioned(
+            top: 0,
+            right: 0,
+            child: Container(
+              height: 50,
+              width: 50,
+              decoration: const BoxDecoration(
+                image:  DecorationImage(
+                  image:  AssetImage("lib/images/discountsheet.jpg"),
+                  fit: BoxFit.cover,
+                ),
+              ),
+              child: Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      '3%',
+                      style: GoogleFonts.nunitoSans(
+                        color: Colors.white,
+                        fontWeight: FontWeight.w800,
+                        fontSize: 10,
+                      ),
+                    ),
+                    Text(
+                      'Off',
+                      style: GoogleFonts.nunitoSans(
+                        color: Colors.white,
+                        fontWeight: FontWeight.w800,
+                        fontSize: 10,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            )),
+
         // Consumer<CartProvider>(builder: (context, model, _) {
         //  return Positioned(
         //    right: 0,

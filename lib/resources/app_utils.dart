@@ -1,11 +1,45 @@
+import 'dart:io';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:kmshoppy/resources/urls.dart';
 Widget appLoading({double? value}) {
   return CircularProgressIndicator(
     value: value,
     color: Colors.white,
     backgroundColor: Colors.redAccent,
+  );
+}
+
+Future<bool> isConnected() async {
+  try {
+    final result = await InternetAddress.lookup('example.com');
+    if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
+      return true;
+    }
+  } on SocketException catch (_) {
+    return false;
+  }
+  return false;
+}
+void showMessage(String message, Color colorBackground, context) {
+  ScaffoldMessenger.of(context).showSnackBar(
+    SnackBar(
+      duration:const Duration(seconds: 5),
+      backgroundColor: colorBackground,
+      content: Text(
+        message,
+        style: GoogleFonts.nunitoSans(letterSpacing: 0.8),
+      ),
+    ),
+  );
+}
+Future navigateToPageRemove(context, var page) {
+  return Navigator.pushAndRemoveUntil(
+    context,
+    createRoute(page),
+        (route) => false,
   );
 }
 Route createRoute(var page) {

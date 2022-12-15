@@ -1,7 +1,6 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 
-import '../models/feturedItem_model.dart';
 import '../models/slider_model.dart';
 
 class SliderProvider with ChangeNotifier{
@@ -18,6 +17,6 @@ class SliderProvider with ChangeNotifier{
       notifyListeners();
     }
     // print('frequentItemList=$frequentItemList');
-    print('sliderList.length${sliderList.length}');
+    //print('sliderList.length${sliderList.length}');
   }
 }

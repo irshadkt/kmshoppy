@@ -1,11 +1,13 @@
 import 'dart:convert';
 
 import 'package:dio/dio.dart';
+import 'package:flutter/material.dart';
 import 'package:kmshoppy/provider/slider_provider.dart';
 import 'package:provider/provider.dart';
 
 import '../models/detils_model.dart';
 import '../provider/feturedItem_provider.dart';
+import '../resources/app_utils.dart';
 import '../resources/urls.dart';
 
 class DioHelper {
@@ -78,54 +80,38 @@ class DioHelper {
         statusMessage: message,
         statusCode: dioError.response?.statusCode ?? 500);
   }
-
-  // Future getCategories(context, int branchId) async {
-  //   final state = Provider.of<CategoryProvider>(context, listen: false);
-  //   final response = await dio
-  //       .get(categoriesListUrl, queryParameters: {"branch_id": branchId});
-  //   // final decode = jsonDecode(response);
-  //   if (response.data['status'] == responseOk) {
-  //     state.addCategory(jsonEncode(response.data));
-  //   } else {
-  //     showMessage(response.data['message'], Colors.redAccent, context);
-  //   }
-  // }
-   Future<List<VariantModel>> getData() async {
-    try {
-      Response response = await dio.get(productDetails);
-      print("response=$response");
-      Map<String, dynamic> result = json.decode(response.data);
-      print("result=$result");
-      if (result['Message'] == "Product Details  ") {
-        List collection = result['Data']['ProdDetails']['ProdImages'];
-        print("list=$collection");
-        return [];
-        return collection.map((s) => VariantModel.fromJson(s)).toList();
-      } else {
-        throw Exception("Internal Server Error");
-      }
-    } on DioError catch (e) {
-      throw Exception(e.response);
-    }
-  }
   Future getFeaturedItems(context, int categoryId) async {
-    //final userState = Provider.of<UserProvider>(context, listen: false);
-    // final state = Provider.of<BranchProvider>(context, listen: false);
-    final state = Provider.of<ItemProvider>(context, listen: false);
-    final response = await dio.get(getHomeProducts);
-    state.addFrequentItems(jsonEncode(response.data));
-  }
-  Future getSample(context,urlKey) async {
-    //final userState = Provider.of<UserProvider>(context, listen: false);
-    // final state = Provider.of<BranchProvider>(context, listen: false);
-    final state = Provider.of<ItemProvider>(context, listen: false);
-    final response = await dio.get("${baseUrl}ProductDetails?urlKey=$urlKey&custId=''&guestId=4653631114&pincode='kmshoppy'&vendorUrlKey='kmshoppy'");
-    state.addVariants(jsonEncode(response.data));
+    // //final userState = Provider.of<UserProvider>(context, listen: false);
+    // // final state = Provider.of<BranchProvider>(context, listen: false);
+    // final state = Provider.of<ItemProvider>(context, listen: false);
+    // final response = await dio.get(getHomeProducts);
+    // if (response.data['Message'] == "Featured Products List") {
+    //   state.addFrequentItems(jsonEncode(response.data));
+    //   // state.setBranch(context);
+    //   // print(
+    //   //     'state.selectedBranchId ${state.selectedBranchId} ${state.branchesList.length}');
+    // } else {
+    //   showMessage(response.data['message'], Colors.redAccent, context);
+    // }
+    isConnected().then(
+          (value) async {
+        if (value) {
 
-    // final parsedJson = json.decode(response.data);
-    // print("privilege=$privilege");
-    // final privilege = parsedJson['Data']['ProdDetails']['variationJson'];
-    // print("privilege=$privilege");
+          final state = Provider.of<ItemProvider>(context, listen: false);
+          final response = await dio.get(getHomeProducts);
+          //final decode = jsonDecode(jsonEncode(response.data));
+          if (response.data['Message'] == "Featured Products List") {
+            state.addFrequentItems(jsonEncode(response.data));
+          } else {
+            showMessage("Something went wrong!,Please try again", Colors.redAccent, context);
+          }
+        } else {
+          showMessage("Oops! Check your internet connection", Colors.redAccent,
+              context);
+        }
+      },
+    );
+
   }
   Future getProductDetails(
       context,urlKey
