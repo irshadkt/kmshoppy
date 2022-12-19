@@ -4,7 +4,7 @@ import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 import '../resources/colors.dart';
 Widget buildIndicator(int activeIndex, List<SliderModel> sliderList,
-    {double dotWidth = 28, double strokeWidth = 10, double dotHeight = 4}) {
+    {double dotWidth = 20, double strokeWidth = 10, double dotHeight = 4}) {
   return AnimatedSmoothIndicator(
     activeIndex: activeIndex,
     count: sliderList.length,

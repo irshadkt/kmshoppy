@@ -36,7 +36,7 @@ class _FrequentItemBlockState extends State<FrequentItemBlock> {
                   borderRadius: BorderRadius.circular(10.0)),
               color: Colors.white,
               child: Container(
-                padding: const EdgeInsets.symmetric(horizontal: 8),
+                padding: const EdgeInsets.symmetric(horizontal: 3),
                 width: MediaQuery.of(context).size.width / 3.4,
                 //height: MediaQuery.of(context).size.height/4,
                 //height: 380,
@@ -46,7 +46,7 @@ class _FrequentItemBlockState extends State<FrequentItemBlock> {
                   children: [
                     Container(
                       //height: 90,
-                      height: MediaQuery.of(context).size.height / 9,
+                      height: MediaQuery.of(context).size.height / 10,
                       margin: const EdgeInsets.only(top: 5),
                       padding: const EdgeInsets.only(top: 10),
                       child: Center(
@@ -74,21 +74,21 @@ class _FrequentItemBlockState extends State<FrequentItemBlock> {
                       maxLines: 2,
                       overflow: TextOverflow.ellipsis,
                       style: GoogleFonts.nunitoSans(
-                          fontWeight: FontWeight.w700, fontSize: 14),
+                          fontWeight: FontWeight.w700, fontSize: 11),
                     ),
                     Text(
                         rupeeSymbol +
                             (widget.data.salesPrice! + 5).toStringAsFixed(2),
                         style: GoogleFonts.nunitoSans(
                             fontWeight: FontWeight.w500,
-                            fontSize: 12,
+                            fontSize: 10,
                             color: greyColor,
                             decoration: TextDecoration.lineThrough)),
                     Text(
                       '₹${widget.data.salesPrice!.toStringAsFixed(2)}',
                       style: GoogleFonts.nunitoSans(
                         fontWeight: FontWeight.w800,
-                        fontSize: 15,
+                        fontSize: 12,
                       ),
                     ),
                     Row(
@@ -98,7 +98,7 @@ class _FrequentItemBlockState extends State<FrequentItemBlock> {
                           '1 Pack',
                           style: GoogleFonts.nunitoSans(
                             fontWeight: FontWeight.w900,
-                            fontSize: 15,
+                            fontSize: 12
                           ),
                         ),
                         Card(
@@ -119,7 +119,7 @@ class _FrequentItemBlockState extends State<FrequentItemBlock> {
         Positioned(
           top: 20,
           left: 10,
-          child: Icon(Icons.favorite_outline_sharp, color: Colors.red[200]),
+          child: Icon(Icons.favorite_outline_sharp, color: Colors.red[200],size: 20,),
         ),
         // Image.asset("lib/images/discountsheet.jpg",height: 40,)
         Positioned(

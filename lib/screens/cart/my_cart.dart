@@ -84,7 +84,7 @@ class _MyCartState extends State<MyCart> {
                     'Cart (${cartList.length})',
                     style: GoogleFonts.nunitoSans(
                       color: Colors.white,
-                        fontWeight: FontWeight.w700, fontSize: 20),
+                        fontWeight: FontWeight.w700, fontSize: 15),
                   ),
                   const Spacer(),
                   TextButton(onPressed: (){
@@ -93,7 +93,7 @@ class _MyCartState extends State<MyCart> {
                     'Empty Cart',
                     style: GoogleFonts.nunitoSans(
                         color: Colors.white,
-                        fontWeight: FontWeight.w700, fontSize: 20),
+                        fontWeight: FontWeight.w700, fontSize: 15),
                   ),)
 
                 ],
@@ -146,19 +146,19 @@ class _MyCartState extends State<MyCart> {
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: [
-                          Image.asset("lib/images/pngoffer.png",height: 30,
+                          Image.asset("lib/images/pngoffer.png",height: 25,
                            // color: Colors.blue,
-                            width: 30,
+                            width: 25,
                            // bundle: ,
                           ),
                           buildTitle('  Avail offers / Coupons',
                               style: GoogleFonts.nunitoSans(
-                                fontSize: 16,
+                                fontSize: 14,
                                   color: Colors.black,
                                   fontWeight: FontWeight.w900)),
                           const Spacer(),
                          const Icon(Icons.play_arrow,
-                           color: Colors.pink,size: 30,),
+                           color: Colors.pink,size: 20,),
 
                         ],
                       ),
@@ -228,11 +228,11 @@ class _MyCartState extends State<MyCart> {
                             children: [
                               buildTitle('Sub Total',
                                   style: GoogleFonts.nunitoSans(
-                                    fontSize: 20,
+                                    fontSize: 18,
                                       fontWeight: FontWeight.w900)),
                               buildValue(
                                   '₹ ${subtotal.toStringAsFixed(2)}',
-                                  style: GoogleFonts.nunitoSans( fontSize: 20,
+                                  style: GoogleFonts.nunitoSans( fontSize: 18,
                                       fontWeight: FontWeight.w900)),
                             ],
                           ),

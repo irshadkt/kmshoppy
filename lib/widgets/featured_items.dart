@@ -45,14 +45,14 @@ class _FeaturedItemsState extends State<FeaturedItems> {
             height: 0,
           ),
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20.0),
+            padding: const EdgeInsets.symmetric(horizontal: 10.0),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
                   widget.title,
                   style: GoogleFonts.nunitoSans(
-                      fontWeight: FontWeight.w700, fontSize: 18),
+                      fontWeight: FontWeight.w700, fontSize: 15),
                 ),
                 widget.inHome?TextButton(
                     onPressed: () {
@@ -67,7 +67,7 @@ class _FeaturedItemsState extends State<FeaturedItems> {
                         Text('See More',
                             style: GoogleFonts.nunitoSans(
                                 fontWeight: FontWeight.w900,
-                                fontSize: 18,
+                                fontSize: 14,
                                 color: Colors.pink)),
                         const SizedBox(width: 5,
                         ),

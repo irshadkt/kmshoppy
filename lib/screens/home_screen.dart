@@ -119,7 +119,7 @@ class _HomepageState extends State<Homepage> {
                               padding: const EdgeInsets.only(top: 10.0),
                               child: SizedBox(
                                 //color: Colors.green,
-                                height: 50,
+                                //height: 50,
                                 child: Row(
                                   mainAxisAlignment: MainAxisAlignment.start,
                                   children: [
@@ -136,7 +136,7 @@ class _HomepageState extends State<Homepage> {
                                         Text(
                                           'Choose Location',
                                           style: GoogleFonts.nunitoSans(
-                                              color: Colors.white,fontSize: 15,fontWeight: FontWeight.w700),
+                                              color: Colors.white,fontSize: 13,fontWeight: FontWeight.w700),
                                         ),
                                         const SizedBox(
                                           width: 20,
@@ -157,19 +157,22 @@ class _HomepageState extends State<Homepage> {
                                 ),
                               ),
                             ),
+                            const SizedBox(
+                              height: 10,
+                            ),
                             InkWell(
                               onTap: () {
                                 // navigateToPage(context, SearchPage())
                               },
                               child: Container(
-                                padding:const EdgeInsets.symmetric(horizontal: 20),
+                                padding:const EdgeInsets.symmetric(horizontal: 10),
                                 decoration: BoxDecoration(
                                     color: Colors.white,
                                     border: Border.all(
                                         color:
                                             const Color.fromRGBO(211, 211, 207, 1)),
-                                    borderRadius: BorderRadius.circular(12)),
-                                height: 50,
+                                    borderRadius: BorderRadius.circular(6)),
+                                height: 30,
                                 margin:const EdgeInsets.symmetric(vertical: 0),
                                 child: Row(
                                   mainAxisAlignment:
@@ -183,7 +186,7 @@ class _HomepageState extends State<Homepage> {
                                     Text(
                                       'Search for over 5000 products',
                                       style: GoogleFonts.nunitoSans(
-                                          color: greyColor,fontSize: 15,fontWeight: FontWeight.w800),
+                                          color: greyColor,fontSize: 13,fontWeight: FontWeight.w800),
                                     ),
                                     // Image.asset(searchIcon)
                                   ],
@@ -196,7 +199,7 @@ class _HomepageState extends State<Homepage> {
                       Consumer<SliderProvider>(builder: (context, model, _) {
                         return Container(
                           width: MediaQuery.of(context).size.width,
-                          height: MediaQuery.of(context).size.height/5.2,
+                          height: MediaQuery.of(context).size.height/5.5,
                           margin:const EdgeInsets.symmetric(vertical: 10),
                           child: CarouselSlider.builder(
                             itemCount: model.sliderList.length,

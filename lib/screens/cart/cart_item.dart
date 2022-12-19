@@ -86,6 +86,7 @@ class _CartItemState extends State<CartItem> {
                   children: [
                     Text(widget.model.itemName,
                         style: GoogleFonts.nunitoSans(
+                          fontSize: 11,
                             fontWeight: FontWeight.w800)),
                     // Text(widget.model.itemUnit,
                     //     style: GoogleFonts.nunitoSans(
@@ -111,8 +112,8 @@ class _CartItemState extends State<CartItem> {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   SizedBox(
-                    height: 35,
-                    width: 35,
+                    height: 30,
+                    width: 30,
                     child: IconButton(
                       icon: const Icon(Icons.remove,color:Colors.white),
                       onPressed: () async {
@@ -154,8 +155,8 @@ class _CartItemState extends State<CartItem> {
                     ),
                   ),
                   SizedBox(
-                    height: 35,
-                    width: 35,
+                    height: 30,
+                    width: 30,
                     child: IconButton(
                       icon: const Icon(Icons.add,color: Colors.white),
                       onPressed: () async {

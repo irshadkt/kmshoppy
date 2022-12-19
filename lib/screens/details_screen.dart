@@ -87,10 +87,10 @@ class _ProductDetailsState extends State<ProductDetails> {
                             const Icon(
                               Icons.search_rounded,
                               color: Colors.black,
-                              size: 25,
+                              size: 24,
                             ),
                             const SizedBox(
-                              width: 20,
+                              width: 10,
                             ),
                             ValueListenableBuilder(
                                 valueListenable: cartListNotifier,
@@ -168,7 +168,7 @@ class _ProductDetailsState extends State<ProductDetails> {
                         child: Text(
                           model.productDetail.itemName ?? "",
                           style: GoogleFonts.nunitoSans(
-                              fontWeight: FontWeight.w800, fontSize: 19),
+                              fontWeight: FontWeight.w800, fontSize: 15),
                         ),
                       ),
                       Padding(
@@ -195,7 +195,7 @@ class _ProductDetailsState extends State<ProductDetails> {
                                             .toStringAsFixed(2),
                                     style: GoogleFonts.nunitoSans(
                                         fontWeight: FontWeight.w800,
-                                        fontSize: 19)),
+                                        fontSize: 15)),
                                 const SizedBox(
                                   width: 10,
                                 ),
@@ -237,7 +237,7 @@ class _ProductDetailsState extends State<ProductDetails> {
                                                   style: GoogleFonts.nunitoSans(
                                                       fontWeight:
                                                           FontWeight.w700,
-                                                      fontSize: 14)),
+                                                      fontSize: 12)),
                                               const SizedBox(
                                                 width: 5,
                                               ),
@@ -250,7 +250,7 @@ class _ProductDetailsState extends State<ProductDetails> {
                                                   style: GoogleFonts.nunitoSans(
                                                       fontWeight:
                                                           FontWeight.w500,
-                                                      fontSize: 13,
+                                                      fontSize: 10,
                                                       color: greyColor,
                                                       decoration: TextDecoration
                                                           .lineThrough)),
@@ -277,7 +277,7 @@ class _ProductDetailsState extends State<ProductDetails> {
                                                             color: Colors.white,
                                                             fontWeight:
                                                                 FontWeight.w700,
-                                                            fontSize: 11),
+                                                            fontSize: 9),
                                                   ),
                                                 ),
                                               ),
