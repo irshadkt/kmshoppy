@@ -47,20 +47,20 @@ class HomeFooter extends StatelessWidget {
                 child: ListTile(
                   contentPadding: EdgeInsets.zero,
                   leading: CircleAvatar(
-                    radius: 15,
+                    radius: 11,
                     backgroundColor: Colors.green[300],
                     child: Center(
                       child: Icon(
                         icon,
                         color: Colors.grey[200],
-                        size: 18,
+                        size: 14,
                       ),
                     ),
                   ),
                   title: Text(
                     text,
                     style: GoogleFonts.nunitoSans(
-                        color: Colors.indigo,fontSize: 14,fontWeight: FontWeight.w800),
+                        color: Colors.indigo,fontSize: 12,fontWeight: FontWeight.w800),
                   ),
                 ),
 
